@@ -26,6 +26,7 @@ import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS.WINDOWS
 import org.junit.jupiter.api.io.TempDir
 import java.io.FileNotFoundException
+import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.NotDirectoryException
 import java.nio.file.Path
@@ -124,7 +125,7 @@ class LanguageModelFilesWriterTest {
 
     @BeforeEach
     fun beforeEach() {
-        inputFilePath = Files.createTempFile(null, null)
+        Files.createTempFile(null, null)
         inputFilePath.toFile().writeText(text)
     }
 
@@ -137,10 +138,11 @@ class LanguageModelFilesWriterTest {
     @DisabledOnOs(WINDOWS) // TempDir cannot be deleted on Windows
     fun createAndWriteLanguageModelFiles(@TempDir outputDirectoryPath: Path) {
         LanguageModelFilesWriter.createAndWriteLanguageModelFiles(
-            inputFilePath = inputFilePath,
-            outputDirectoryPath = outputDirectoryPath,
-            language = Language.ENGLISH,
-            charClass = "\\p{L}&&\\p{IsLatin}"
+            inputFilePath,
+            Charset.defaultCharset(),
+            outputDirectoryPath,
+            Language.ENGLISH,
+            "\\p{L}&&\\p{IsLatin}"
         )
 
         val modelFilePaths = retrieveAndSortModelFiles(outputDirectoryPath)
@@ -161,9 +163,11 @@ class LanguageModelFilesWriterTest {
         val relativeInputFilePath = Path("some/relative/path/file.txt")
         val exception = assertThrows<IllegalArgumentException> {
             LanguageModelFilesWriter.createAndWriteLanguageModelFiles(
-                inputFilePath = relativeInputFilePath,
-                outputDirectoryPath = Path("/some/output/directory"),
-                language = Language.ENGLISH
+                relativeInputFilePath,
+                Charset.defaultCharset(),
+                Path("/some/output/directory"),
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}"
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -176,9 +180,11 @@ class LanguageModelFilesWriterTest {
         val nonExistingInputFilePath = Path("/some/non-existing/path/file.txt").toAbsolutePath()
         val exception = assertThrows<java.nio.file.NoSuchFileException> {
             LanguageModelFilesWriter.createAndWriteLanguageModelFiles(
-                inputFilePath = nonExistingInputFilePath,
-                outputDirectoryPath = Path("/some/output/directory"),
-                language = Language.ENGLISH
+                nonExistingInputFilePath,
+                Charset.defaultCharset(),
+                Path("/some/output/directory"),
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}"
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -193,9 +199,11 @@ class LanguageModelFilesWriterTest {
     ) {
         val exception = assertThrows<FileNotFoundException> {
             LanguageModelFilesWriter.createAndWriteLanguageModelFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = Path("/some/output/directory"),
-                language = Language.ENGLISH
+                inputFilePath,
+                Charset.defaultCharset(),
+                Path("/some/output/directory"),
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}"
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -208,9 +216,11 @@ class LanguageModelFilesWriterTest {
         val relativeOutputDirectoryPath = Path("some/relative/path")
         val exception = assertThrows<IllegalArgumentException> {
             LanguageModelFilesWriter.createAndWriteLanguageModelFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = relativeOutputDirectoryPath,
-                language = Language.ENGLISH
+                inputFilePath,
+                Charset.defaultCharset(),
+                relativeOutputDirectoryPath,
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}"
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -223,9 +233,11 @@ class LanguageModelFilesWriterTest {
         val nonExistingOutputDirectoryPath = Path("/some/non-existing/directory").toAbsolutePath()
         val exception = assertThrows<NotDirectoryException> {
             LanguageModelFilesWriter.createAndWriteLanguageModelFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = nonExistingOutputDirectoryPath,
-                language = Language.ENGLISH
+                inputFilePath,
+                Charset.defaultCharset(),
+                nonExistingOutputDirectoryPath,
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}"
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -237,9 +249,11 @@ class LanguageModelFilesWriterTest {
     fun `assert that file as output directory throws exception`() {
         val exception = assertThrows<NotDirectoryException> {
             LanguageModelFilesWriter.createAndWriteLanguageModelFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = inputFilePath,
-                language = Language.ENGLISH
+                inputFilePath,
+                Charset.defaultCharset(),
+                inputFilePath,
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}"
             )
         }
         assertThat(exception.message).isEqualTo(

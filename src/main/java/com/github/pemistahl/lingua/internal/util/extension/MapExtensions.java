@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.pemistahl.lingua.internal.util.extension
+package com.github.pemistahl.lingua.internal.util.extension;
 
-internal fun <T> MutableMap<T, Int>.incrementCounter(key: T) {
-    this[key] = this.getOrDefault(key, 0) + 1
+
+import java.util.Map;
+
+public class MapExtensions {
+    public static <T> void incrementCounter(Map<T, Integer> map, T key) {
+        map.put(key, map.getOrDefault(key, 0) + 1);
+    }
 }

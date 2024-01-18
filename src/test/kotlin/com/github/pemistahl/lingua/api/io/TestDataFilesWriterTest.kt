@@ -26,6 +26,7 @@ import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS.WINDOWS
 import org.junit.jupiter.api.io.TempDir
 import java.io.FileNotFoundException
+import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.NotDirectoryException
 import java.nio.file.Path
@@ -88,11 +89,12 @@ class TestDataFilesWriterTest {
     @DisabledOnOs(WINDOWS) // TempDir cannot be deleted on Windows
     fun createAndWriteTestDataFiles(@TempDir outputDirectoryPath: Path) {
         TestDataFilesWriter.createAndWriteTestDataFiles(
-            inputFilePath = inputFilePath,
-            outputDirectoryPath = outputDirectoryPath,
-            language = Language.ENGLISH,
-            charClass = "\\p{L}&&\\p{IsLatin}",
-            maximumLines = 4
+            inputFilePath,
+            Charset.defaultCharset(),
+            outputDirectoryPath,
+            Language.ENGLISH,
+            "\\p{L}&&\\p{IsLatin}",
+            4
         )
 
         val subDirectoryPaths = retrieveAndSortSubdirectories(outputDirectoryPath)
@@ -111,10 +113,12 @@ class TestDataFilesWriterTest {
         val relativeInputFilePath = Path("some/relative/path/file.txt")
         val exception = assertThrows<IllegalArgumentException> {
             TestDataFilesWriter.createAndWriteTestDataFiles(
-                inputFilePath = relativeInputFilePath,
-                outputDirectoryPath = Path("/some/output/directory"),
-                language = Language.ENGLISH,
-                maximumLines = 4
+                relativeInputFilePath,
+                Charset.defaultCharset(),
+                Path("/some/output/directory"),
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}",
+                4,
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -127,10 +131,12 @@ class TestDataFilesWriterTest {
         val nonExistingInputFilePath = Path("/some/non-existing/path/file.txt").toAbsolutePath()
         val exception = assertThrows<java.nio.file.NoSuchFileException> {
             TestDataFilesWriter.createAndWriteTestDataFiles(
-                inputFilePath = nonExistingInputFilePath,
-                outputDirectoryPath = Path("/some/output/directory"),
-                language = Language.ENGLISH,
-                maximumLines = 4
+                nonExistingInputFilePath,
+                Charset.defaultCharset(),
+                Path("/some/output/directory"),
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}",
+                4
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -145,10 +151,12 @@ class TestDataFilesWriterTest {
     ) {
         val exception = assertThrows<FileNotFoundException> {
             TestDataFilesWriter.createAndWriteTestDataFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = Path("/some/output/directory"),
-                language = Language.ENGLISH,
-                maximumLines = 4
+                inputFilePath,
+                Charset.defaultCharset(),
+                Path("/some/output/directory"),
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}",
+                4
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -161,10 +169,12 @@ class TestDataFilesWriterTest {
         val relativeOutputDirectoryPath = Path("some/relative/path")
         val exception = assertThrows<IllegalArgumentException> {
             TestDataFilesWriter.createAndWriteTestDataFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = relativeOutputDirectoryPath,
-                language = Language.ENGLISH,
-                maximumLines = 4
+                inputFilePath,
+                Charset.defaultCharset(),
+                relativeOutputDirectoryPath,
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}",
+                4
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -177,10 +187,12 @@ class TestDataFilesWriterTest {
         val nonExistingOutputDirectoryPath = Path("/some/non-existing/directory").toAbsolutePath()
         val exception = assertThrows<NotDirectoryException> {
             TestDataFilesWriter.createAndWriteTestDataFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = nonExistingOutputDirectoryPath,
-                language = Language.ENGLISH,
-                maximumLines = 4
+                inputFilePath,
+                Charset.defaultCharset(),
+                nonExistingOutputDirectoryPath,
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}",
+                4
             )
         }
         assertThat(exception.message).isEqualTo(
@@ -192,10 +204,12 @@ class TestDataFilesWriterTest {
     fun `assert that file as output directory throws exception`() {
         val exception = assertThrows<NotDirectoryException> {
             TestDataFilesWriter.createAndWriteTestDataFiles(
-                inputFilePath = inputFilePath,
-                outputDirectoryPath = inputFilePath,
-                language = Language.ENGLISH,
-                maximumLines = 4
+                inputFilePath,
+                Charset.defaultCharset(),
+                inputFilePath,
+                Language.ENGLISH,
+                "\\p{L}&&\\p{IsLatin}",
+                4
             )
         }
         assertThat(exception.message).isEqualTo(

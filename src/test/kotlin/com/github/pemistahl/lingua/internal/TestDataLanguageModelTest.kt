@@ -30,7 +30,7 @@ class TestDataLanguageModelTest {
 
     @Test
     fun `assert that unigram language model can be created from test data`() {
-        val model = TestDataLanguageModel.fromText(text, ngramLength = 1)
+        val model = TestDataLanguageModel.fromText(text, 1)
 
         assertThat(model.ngrams).containsExactlyInAnyOrderElementsOf(
             setOf(
@@ -42,7 +42,7 @@ class TestDataLanguageModelTest {
 
     @Test
     fun `assert that bigram language model can be created from test data`() {
-        val model = TestDataLanguageModel.fromText(text, ngramLength = 2)
+        val model = TestDataLanguageModel.fromText(text, 2)
 
         assertThat(model.ngrams).containsExactlyInAnyOrderElementsOf(
             setOf(
@@ -58,7 +58,7 @@ class TestDataLanguageModelTest {
 
     @Test
     fun `assert that trigram language model can be created from test data`() {
-        val model = TestDataLanguageModel.fromText(text, ngramLength = 3)
+        val model = TestDataLanguageModel.fromText(text, 3)
 
         assertThat(model.ngrams).containsExactlyInAnyOrderElementsOf(
             setOf(
@@ -74,7 +74,7 @@ class TestDataLanguageModelTest {
 
     @Test
     fun `assert that quadrigram language model can be created from test data`() {
-        val model = TestDataLanguageModel.fromText(text, ngramLength = 4)
+        val model = TestDataLanguageModel.fromText(text, 4)
 
         assertThat(model.ngrams).containsExactlyInAnyOrderElementsOf(
             setOf(
@@ -89,7 +89,7 @@ class TestDataLanguageModelTest {
 
     @Test
     fun `assert that fivegram language model can be created from test data`() {
-        val model = TestDataLanguageModel.fromText(text, ngramLength = 5)
+        val model = TestDataLanguageModel.fromText(text, 5)
 
         assertThat(model.ngrams).containsExactlyInAnyOrderElementsOf(
             setOf(

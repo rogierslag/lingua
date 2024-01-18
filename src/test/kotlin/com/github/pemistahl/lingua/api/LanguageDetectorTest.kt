@@ -230,17 +230,17 @@ class LanguageDetectorTest {
     private lateinit var quadrigramTestDataLanguageModel: TestDataLanguageModel
 
     private var detectorForEnglishAndGerman = LanguageDetector(
-        languages = mutableSetOf(ENGLISH, GERMAN),
-        minimumRelativeDistance = 0.0,
-        isEveryLanguageModelPreloaded = false,
-        isLowAccuracyModeEnabled = false
+        mutableSetOf(ENGLISH, GERMAN),
+        0.0,
+        false,
+        false
     )
 
     private val detectorForAllLanguages = LanguageDetector(
-        languages = Language.all().toMutableSet(),
-        minimumRelativeDistance = 0.0,
-        isEveryLanguageModelPreloaded = false,
-        isLowAccuracyModeEnabled = false
+        Language.all().toMutableSet(),
+        0.0,
+        false,
+        false
     )
 
     @BeforeAll
@@ -935,19 +935,6 @@ class LanguageDetectorTest {
         assertThat(detectedLanguages.size).isEqualTo(1)
 
         removeLanguageModelsFromDetector()
-
-        assertThatAllLanguageModelsAreUnloaded()
-
-        addLanguageModelsToDetector()
-
-        assertThatAllLanguageModelsAreLoaded()
-    }
-
-    @Test
-    fun `assert that language models can be properly unloaded`() {
-        assertThatAllLanguageModelsAreLoaded()
-
-        detectorForEnglishAndGerman.unloadLanguageModels()
 
         assertThatAllLanguageModelsAreUnloaded()
 

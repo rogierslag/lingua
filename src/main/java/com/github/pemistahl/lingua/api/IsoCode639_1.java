@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.pemistahl.lingua.api
+package com.github.pemistahl.lingua.api;
 
 /**
  * The ISO 639-1 code representations for the supported languages.
  *
  * ISO 639 is a standardized nomenclature used to classify languages.
  */
-enum class IsoCode639_1 {
+public enum IsoCode639_1 {
 
     /**
      * The ISO 639-1 code for [Afrikaans][Language.AFRIKAANS].
@@ -423,5 +423,8 @@ enum class IsoCode639_1 {
      */
     NONE;
 
-    override fun toString() = this.name.lowercase()
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }
